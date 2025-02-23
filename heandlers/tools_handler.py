@@ -7,6 +7,8 @@ from db.database import get_db
 from db.services import get_or_create_user
 from api.openai import ask_ai
 
+from chatgpt_md_converter import telegram_format
+
 router = Router()
 
 class ToolsState(StatesGroup):
@@ -92,7 +94,7 @@ async def process_code(message: types.Message, state: FSMContext):
             ]
 
             response = ask_ai(prompt)
-            await message.answer(response, parse_mode=ParseMode.HTML)
+            await message.answer(telegram_format(response), parse_mode=ParseMode.HTML)
             await state.clear()
 
     except Exception as e:

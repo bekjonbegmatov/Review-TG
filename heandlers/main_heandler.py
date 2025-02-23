@@ -5,6 +5,7 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
+from chatgpt_md_converter import telegram_format
 
 from buttons.keyboards import main_kb, tools_kb
 from db.database import get_db
@@ -76,7 +77,7 @@ async def process_homework(message: Message, state: FSMContext):
         
         from api.openai import ask_ai
         response = ask_ai(prompt)
-        await message.answer(response, parse_mode=ParseMode.HTML.value)
+        await message.answer(telegram_format(response), parse_mode=ParseMode.HTML.value)
         await state.clear()
 
 @router.message(F.text == "💻 Другие инструменты")

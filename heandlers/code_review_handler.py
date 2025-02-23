@@ -14,6 +14,7 @@ from db.services import (
     get_user_conversations
 )
 from api.openai import ask_ai
+from chatgpt_md_converter import telegram_format
 
 router = Router()
 
@@ -67,7 +68,7 @@ async def process_code(message: Message, state: FSMContext):
             add_message(db, conversation.id, 'assistant', response)
             
             # Send response to user
-            await message.answer(response, parse_mode=ParseMode.HTML.value)
+            await message.answer(telegram_format(response), parse_mode=ParseMode.HTML.value)
             await message.answer("Вы можете задать дополнительные вопросы по коду или отправить /stop для завершения сессии.")
             
             # Change state to in_conversation
@@ -98,7 +99,7 @@ async def continue_conversation(message: Message, state: FSMContext):
             response = ask_ai(prompt)
             add_message(db, conversation_id, 'assistant', response)
     
-            await message.answer(response, parse_mode=ParseMode.HTML)
+            await message.answer(telegram_format(response), parse_mode=ParseMode.HTML)
             
     except Exception as e:
         await message.answer(f"An error occurred while processing your message: {str(e)}")
@@ -132,7 +133,7 @@ async def show_history(message: Message):
                         history_text += f"🤖 Review:\n{msg['content'][:100]}...\n\n"
                 history_text += "---\n"
             
-            await message.answer(history_text, parse_mode=ParseMode.HTML)
+            await message.answer(telegram_format(history_text), parse_mode=ParseMode.HTML)
     except Exception as e:
         await message.answer(f"An error occurred while fetching your history: {str(e)}")
         
