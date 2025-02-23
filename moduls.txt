@@ -18,6 +18,7 @@ magic-filter==1.0.12
 multidict==6.1.0
 openai==1.63.2
 propcache==0.2.1
+psutil==7.0.0
 pydantic==2.10.6
 pydantic_core==2.27.2
 python-dotenv==1.0.1
